@@ -11,12 +11,20 @@ namespace CoreAPI.Repository
     public class UsersRepository : IUsersRepository
     {
         private readonly UserContext _userContext;
-
         public UsersRepository(UserContext userContext)
         {
             _userContext = userContext;
         }
-
+        public async Task<List<User>> GetAllUsers()
+        {
+            var result = await _userContext.Users.ToListAsync();
+            return result;
+        }
+        public async Task<User> Getuser(int UserID)
+        {
+            var result = await _userContext.Users.FirstOrDefaultAsync(user => user.UserID == UserID);
+            return result;
+        }
         public async Task<User> CreateUser(User user)
         {
             try
@@ -52,19 +60,6 @@ namespace CoreAPI.Repository
                 throw;
             }
         }
-
-        public async Task<List<User>> GetAllUsers()
-        {
-            var result = await _userContext.Users.ToListAsync();
-            return result;
-        }
-
-        public async Task<User> Getuser(int UserID)
-        {
-            var result = await _userContext.Users.FirstOrDefaultAsync(user => user.UserID == UserID);
-            return result;
-        }
-
         public async Task<User> DeleteUser(int UserID)
         {
             try
@@ -84,6 +79,5 @@ namespace CoreAPI.Repository
                 throw;
             }
         }
-
     }
 }
